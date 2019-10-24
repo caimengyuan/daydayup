@@ -65,7 +65,9 @@ for t in threads:
 print("退出主线程")
 
 '''
-    线程优先级队列（ Queue）
+    线程优先级队列（ Queue）：
+        Python 的 Queue 模块中提供了同步的、线程安全的队列类，包括FIFO（先入先出)队列Queue，LIFO（后入先出）队列LifoQueue，
+    和优先级队列 PriorityQueue。这些队列都实现了锁原语，能够在多线程中直接使用，可以使用队列来实现线程间的同步。
 '''
 import queue
 import threading
@@ -82,9 +84,9 @@ class myThread (threading.Thread):
         self.q = q
 
     def run(self):
-        print ("开启线程：" + self.name)
+        print("开启线程：" + self.name)
         process_data(self.name, self.q)
-        print ("退出线程：" + self.name)
+        print("退出线程：" + self.name)
 
 
 def process_data(threadName, q):
@@ -93,7 +95,7 @@ def process_data(threadName, q):
         if not workQueue.empty():
             data = q.get()
             queueLock.release()
-            print ("%s processing %s" % (threadName, data))
+            print("%s processing %s" % (threadName, data))
         else:
             queueLock.release()
         time.sleep(1)
@@ -129,4 +131,4 @@ exitFlag = 1
 # 等待所有线程完成
 for t in threads:
     t.join()
-print ("退出主线程")
+print("退出主线程")
