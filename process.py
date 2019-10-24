@@ -85,7 +85,6 @@ if __name__ == '__main__':
     p.join()
     print("All processes done!")
 
-
 '''
      Queue进程间通信
 '''
@@ -94,39 +93,38 @@ import os, time, random
 
 
 # 写数据进程执行的代码:
-def proc_write(q,urls):
-  print('Process(%s) is writing...' % os.getpid())
-  for url in urls:
-    q.put(url)
-    print('Put %s to queue...' % url)
-    time.sleep(random.random())
+def proc_write(q, urls):
+    print('Process(%s) is writing...' % os.getpid())
+    for url in urls:
+        q.put(url)
+        print('Put %s to queue...' % url)
+        time.sleep(random.random())
 
 
 # 读数据进程执行的代码:
 def proc_read(q):
-  print('Process(%s) is reading...' % os.getpid())
-  while True:
-    url = q.get(True)
-    print('Get %s from queue.' % url)
+    print('Process(%s) is reading...' % os.getpid())
+    while True:
+        url = q.get(True)
+        print('Get %s from queue.' % url)
 
 
-if __name__=='__main__':
-  # 父进程创建Queue，并传给各个子进程：
-  q = Queue()
-  proc_writer1 = Process(target=proc_write, args=(q,['url_1', 'url_2', 'url_3']))
-  proc_writer2 = Process(target=proc_write, args=(q,['url_4','url_5','url_6']))
-  proc_reader = Process(target=proc_read, args=(q,))
-  # 启动子进程proc_writer，写入:
-  proc_writer1.start()
-  proc_writer2.start()
-  # 启动子进程proc_reader，读取:
-  proc_reader.start()
-  # 等待proc_writer结束:
-  proc_writer1.join()
-  proc_writer2.join()
-  # proc_reader进程里是死循环，无法等待其结束，只能强行终止:
-  proc_reader.terminate()
-
+if __name__ == '__main__':
+    # 父进程创建Queue，并传给各个子进程：
+    q = Queue()
+    proc_writer1 = Process(target=proc_write, args=(q, ['url_1', 'url_2', 'url_3']))
+    proc_writer2 = Process(target=proc_write, args=(q, ['url_4', 'url_5', 'url_6']))
+    proc_reader = Process(target=proc_read, args=(q,))
+    # 启动子进程proc_writer，写入:
+    proc_writer1.start()
+    proc_writer2.start()
+    # 启动子进程proc_reader，读取:
+    proc_reader.start()
+    # 等待proc_writer结束:
+    proc_writer1.join()
+    proc_writer2.join()
+    # proc_reader进程里是死循环，无法等待其结束，只能强行终止:
+    proc_reader.terminate()
 
 '''
     Pipe进程间通信
@@ -135,13 +133,13 @@ from multiprocessing import Process, Pipe
 
 
 def send(pipe):
-  pipe.send(['spam',42, 'egg'])  # send 传输一个列表
-  pipe.close()
+    pipe.send(['spam', 42, 'egg'])  # send 传输一个列表
+    pipe.close()
 
 
 if __name__ == '__main__':
-  (con1, con2) = Pipe()              # 创建两个 Pipe 实例
-  sender = Process(target=send, args=(con1, ))   # 函数的参数，args 一定是实例化之后的 Pip 变量，不能直接写 args=(Pip(),)
-  sender.start()                  # Process 类启动进程
-  print("con2 got: %s" % con2.recv())       # 管道的另一端 con2 从send收到消息
-  con2.close()
+    (con1, con2) = Pipe()  # 创建两个 Pipe 实例
+    sender = Process(target=send, args=(con1,))  # 函数的参数，args 一定是实例化之后的 Pip 变量，不能直接写 args=(Pip(),)
+    sender.start()  # Process 类启动进程
+    print("con2 got: %s" % con2.recv())  # 管道的另一端 con2 从send收到消息
+    con2.close()
