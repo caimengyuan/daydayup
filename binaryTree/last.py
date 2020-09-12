@@ -32,6 +32,35 @@ def last_cycle(root):
                 node = stack.pop()
                 print(node.value)
 
+# 重新理解后序遍历的循环算法：
+# 由前序遍历可知，前序遍历的顺序是中左右，后序遍历的顺序是左右中
+# 那么颠倒前序遍历的顺序，是右左中，如果在设置遍历左右结点的顺序则就可以由前序遍历转化为后序遍历
+def pre_cycle_0(root):
+    stack = []
+    sol = []
+    curr = root
+    while stack or curr:
+        if curr:
+            sol.append(curr.value)
+            stack.append(curr.right)
+            curr = curr.left
+        else:
+            curr = stack.pop()
+    print(sol)
+
+def last_cycle_0(root):
+    stack = []
+    sol = []
+    curr = root
+    while curr or stack:
+        if curr:
+            sol.append(curr.value)
+            stack.append(curr.left)
+            curr = curr.right
+        else:
+            curr = stack.pop()
+    print(sol[::-1])
+
 
 if __name__ == "__main__":
     # 构造一棵二叉树
@@ -56,6 +85,8 @@ if __name__ == "__main__":
     t3.right = t7
 
     print("递归-后序遍历：")
-    last_normal(t1)
+    # last_normal(t1)
+    pre_cycle_0(t1)
     print("非递归-后序遍历")
-    last_cycle(t1)
+    # last_cycle(t1)
+    last_cycle_0(t1)
