@@ -1,23 +1,30 @@
 '''
-快速排序
+快速排序，分治法，三步走
+
 '''
 
 def quickSort_01(array):
     # 递归出口
     if len(array) < 2:
         return array
+
     else:
-        index = 0
-        privot = array[index]
-        less_part = [i for i in array[index+1:] if i <= privot]
-        great_part = [i for i in array[index+1:] if i > privot]
-        return quickSort_01(less_part) + [privot] + quickSort_01(great_part)
+        index = 0   # 第一个元素作为pivot
+        pivot = array[index]
+        less_part = [
+            i for i in array[index+1:] if i <= pivot
+        ]
+        great_part = [
+            i for i in array[index+1:] if i > pivot
+        ]
+        return quickSort_01(less_part) + [pivot] + quickSort_01(great_part)
 
 
 def quickSort_02(array, start, end):
     # 递归出口
     if start >= end:
         return
+
     low = start 
     high = end 
     value = array[start] 
@@ -41,8 +48,9 @@ def quickSort_02(array, start, end):
 def test_quicksort():
     import random
     ll = list(range(10))
-    random.shuffle(ll)
+    random.shuffle(ll)  # 打乱数组
     print(ll)
     print(quickSort_02(ll, 0, len(ll)-1))
+    assert quickSort_01(ll) == sorted(ll)
 
 test_quicksort()

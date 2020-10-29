@@ -1,5 +1,5 @@
 '''
-归并排序
+归并排序，用到了合并两个有序数组
 '''
 
 def merge_sorted_list(sorted_a, sorted_b):
@@ -29,3 +29,12 @@ def merge_sort(array):
         left_half = merge_sort(array[:mid])
         right_half = merge_sort(array[mid:])
         return merge_sorted_list(left_half, right_half)
+
+def test_merge_sort():
+    import random
+    ll = list(range(10))
+    random.shuffle(ll)
+    print(ll)
+    print(merge_sort(ll))
+
+test_merge_sort()
